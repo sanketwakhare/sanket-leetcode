@@ -2,33 +2,61 @@ class Solution {
     public int kthSmallest(int[][] matrix, int k) {
         
         int answer = -1;
-		MaxHeap<Integer> maxHeap = new MaxHeap<Integer>();
+		MinHeap<Pair> minHeap = new MinHeap<Pair>();
+		int rowsCount = matrix.length;
+		int colsCount = matrix[0].length;
 
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[0].length; j++) {
-				int currentElement = matrix[i][j];
-				if (maxHeap.size() < k) {
-					maxHeap.insert(currentElement);
-				} else {
-					if (maxHeap.peekMax() > currentElement) {
-						maxHeap.getMaximum();
-						maxHeap.insert(currentElement);
-					}
-				}
+		// maintain the heap of size K = no of rows
+		int i = 0;
+		while (i < rowsCount) {
+			Pair pair = new Pair(matrix[i][0], i, 0);
+			i++;
+			minHeap.insert(pair);
+		}
+		// extract minimum B-1 times
+		while (k > 1) {
+			// find min and insert the next element from same array
+			Pair currMin = minHeap.getMinimum();
+			if (currMin.j == colsCount - 1) {
+				// no more elements to from current row/sorted array
+			} else {
+				Pair nextEleInSameRow = new Pair(matrix[currMin.i][currMin.j + 1], currMin.i, currMin.j + 1);
+				minHeap.insert(nextEleInSameRow);
 			}
+			k--;
 		}
-		if (maxHeap.size() > 0) {
-			answer = maxHeap.peekMax();
-		}
+		// extract last element from heap which is Bth smallest
+		Pair kthMin = minHeap.getMinimum();
+		answer = kthMin.key;
 		return answer;
         
     }
     
-    // custom MaxHeap implementation
-    class MaxHeap<T extends Comparable<T>> {
+    class Pair implements Comparable<Pair> {
+		int key;
+		int i;
+		int j;
+
+		public Pair(int key, int i, int j) {
+			this.key = key;
+			this.i = i;
+			this.j = j;
+		}
+
+		@Override
+		public int compareTo(Pair o2) {
+			if (this.key > o2.key)
+				return 1;
+			else if (this.key < o2.key)
+				return -1;
+			return 0;
+		}
+	}
+    
+    class MinHeap<T extends Comparable<T>> {
         List<T> heap;
 
-        public MaxHeap() {
+        public MinHeap() {
             heap = new ArrayList<T>();
         }
 
@@ -53,7 +81,7 @@ class Solution {
             int i = this.heap.size() - 1;
             while (i > 0) {
                 int parentIndex = (i - 1) / 2;
-                if (heap.get(i).compareTo(heap.get(parentIndex)) > 0) {
+                if (heap.get(i).compareTo(heap.get(parentIndex)) < 0) {
                     swap(i, parentIndex);
                     i = parentIndex;
                 } else {
@@ -62,7 +90,7 @@ class Solution {
             }
         }
 
-        public T getMaximum() {
+        public T getMinimum() {
             T x = null;
             if (!isEmpty()) {
                 x = heap.get(0);
@@ -74,20 +102,20 @@ class Solution {
                 while ((2 * i) + 1 < heap.size()) {
                     int leftChildIndex = (2 * i) + 1;
                     int rightChildIndex = (2 * i) + 2;
-                    T max = null;
+                    T min = null;
 
                     // find minimum out of 3
-                    max = heap.get(i).compareTo(heap.get(leftChildIndex)) > 0 ? heap.get(i) : heap.get(leftChildIndex);
+                    min = heap.get(i).compareTo(heap.get(leftChildIndex)) < 0 ? heap.get(i) : heap.get(leftChildIndex);
                     if (rightChildIndex < heap.size()) {
-                        max = heap.get(rightChildIndex).compareTo(max) > 0 ? heap.get(rightChildIndex) : max;
+                        min = heap.get(rightChildIndex).compareTo(min) < 0 ? heap.get(rightChildIndex) : min;
                     }
 
-                    if (max == heap.get(i)) {
+                    if (min == heap.get(i)) {
                         break;
-                    } else if (max == heap.get(leftChildIndex)) {
+                    } else if (min == heap.get(leftChildIndex)) {
                         swap(i, leftChildIndex);
                         i = leftChildIndex;
-                    } else if (rightChildIndex < heap.size() && max == heap.get(rightChildIndex)) {
+                    } else if (rightChildIndex < heap.size() && min == heap.get(rightChildIndex)) {
                         swap(i, rightChildIndex);
                         i = rightChildIndex;
                     }
@@ -97,7 +125,7 @@ class Solution {
             return x;
         }
 
-        public T peekMax() {
+        public T peekMin() {
             return heap.get(0);
         }
 
