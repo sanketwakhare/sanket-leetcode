@@ -11,140 +11,48 @@
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
         
-        // Min Heap of size K where (K = size of list)
-        MinHeap<NodeItem> minHeap = new MinHeap<NodeItem>();
-
-        // store heads of all lists into heap
-        for (int i = 0; i < lists.length; i++) {
-            ListNode node = lists[i];
-            if(node != null)
-                minHeap.insert(new NodeItem(node.val, node));
+        // initialize minHeap
+        PriorityQueue<ListNode> minHeap = new PriorityQueue<ListNode>(new Comparator<ListNode>() {
+            @Override
+            public int compare(ListNode l1, ListNode l2) {
+                if(l1!=null && l2!=null) {
+                    return l1.val - l2.val;
+                }
+                return 0;
+            }
+        });
+        
+        // insert all heads of all lists into heap
+        for(int i=0; i< lists.length; i++) {
+            ListNode currHead = lists[i];
+            if(currHead != null) {
+                minHeap.add(currHead);
+            }
         }
-
-        // initialize head and temp pointers
+        
+        // now get the min element from heap and insert next element of min into heap is available
         ListNode head = null;
-        ListNode temp = head;
-
-        // get min element from heap and append to next of result linked list
-        while (!minHeap.isEmpty()) {
-            // get minimum node from heap
-            ListNode x = minHeap.getMinimum().node;
+        ListNode curr = head;
+        while(!minHeap.isEmpty()) {
             
-            // add next available node of the current minimum node into the heap
-            ListNode nextNode = x.next;
-            if (nextNode != null) {
-                minHeap.insert(new NodeItem(nextNode.val, nextNode));
-            }
-
-            // attach the node x at end to the result list
-            if (head == null) {
+            ListNode x = minHeap.poll();
+            if(head == null) {
+                // if head is null, update head
                 head = x;
-                temp = head;
+                curr = head;                
             } else {
-                temp.next = x;
-                temp = temp.next;
+                // add x to the last of curr pointer
+                curr.next = x;
+                curr = curr.next;                
+            }
+            // insert next element of x into heap if available
+            ListNode temp = x.next;
+            if(temp != null) {
+                minHeap.add(temp);
             }
         }
-        return head;  
-    }
-    
-    // custom node type which stores value and linked list node
-    class NodeItem implements Comparable<NodeItem> {
-        int value;
-        ListNode node;
-
-        public NodeItem(int value, ListNode node) {
-            this.value = value;
-            this.node = node;
-        }
-
-        @Override
-        public int compareTo(NodeItem o) {
-            return this.value - o.value;
-        }
-    }
-    
-    // Min Heap implementation
-    public class MinHeap<T extends Comparable<T>> {
-        List<T> heap;
-
-        public MinHeap() {
-            heap = new ArrayList<T>();
-        }
-
-        public int size() {
-            return heap.size();
-        }
-
-        public List<T> getHeap() {
-            return heap;
-        }
-
-        public boolean isEmpty() {
-            if (heap.size() == 0) {
-                return true;
-            }
-            return false;
-        }
-
-        public void insert(T x) {
-
-            heap.add(x);
-            int i = this.heap.size() - 1;
-            while (i > 0) {
-                int parentIndex = (i - 1) / 2;
-                if (heap.get(i).compareTo(heap.get(parentIndex)) < 0) {
-                    swap(i, parentIndex);
-                    i = parentIndex;
-                } else {
-                    return;
-                }
-            }
-        }
-
-        public T getMinimum() {
-            T x = null;
-            if (!isEmpty()) {
-                x = heap.get(0);
-                // swap last element and x
-                swap(0, heap.size() - 1);
-                heap.remove(heap.size() - 1);
-
-                int i = 0;
-                while ((2 * i) + 1 < heap.size()) {
-                    int leftChildIndex = (2 * i) + 1;
-                    int rightChildIndex = (2 * i) + 2;
-                    T min = null;
-
-                    // find minimum out of 3
-                    min = heap.get(i).compareTo(heap.get(leftChildIndex)) < 0 ? heap.get(i) : heap.get(leftChildIndex);
-                    if (rightChildIndex < heap.size()) {
-                        min = heap.get(rightChildIndex).compareTo(min) < 0 ? heap.get(rightChildIndex) : min;
-                    }
-
-                    if (min == heap.get(i)) {
-                        break;
-                    } else if (min == heap.get(leftChildIndex)) {
-                        swap(i, leftChildIndex);
-                        i = leftChildIndex;
-                    } else if (rightChildIndex < heap.size() && min == heap.get(rightChildIndex)) {
-                        swap(i, rightChildIndex);
-                        i = rightChildIndex;
-                    }
-                }
-
-            }
-            return x;
-        }
-
-        public T peekMin() {
-            return heap.get(0);
-        }
-
-        private void swap(int i, int j) {
-            T temp = heap.get(i);
-            heap.set(i, heap.get(j));
-            heap.set(j, temp);
-        }
+        // return head of the merged list
+        return head;
+        
     }
 }
