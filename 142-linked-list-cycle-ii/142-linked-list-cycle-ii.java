@@ -15,6 +15,7 @@ public class Solution {
         if(head == null) return head;
         ListNode slow = head;
         ListNode fast = head;
+        
         boolean isCycle = false;
         while(fast!=null && fast.next!=null) {
             slow = slow.next;
@@ -28,6 +29,7 @@ public class Solution {
         
         if(!isCycle) return null;
         
+        // find intersection point
         ListNode curr = head;
         while(curr != slow) {
             curr = curr.next;
