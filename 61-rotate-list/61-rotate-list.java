@@ -23,16 +23,18 @@ class Solution {
         temp.next = head;
         
         // traverse N-k elements and break the link
-        // return N-k+1st element as new head
         k = k % N;
-        int pos = N-k;
+        int pos = N-k-1;
         temp = head;
-        while( pos > 1) {
+        while( pos > 0) {
             temp = temp.next;
             pos--;
         }
+        // save new head
         head = temp.next;
+        // break the link
         temp.next = null;
+        // return new head
         return head;
     }
 }
