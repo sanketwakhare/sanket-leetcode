@@ -18,11 +18,17 @@ import java.util.stream.*;
 class Solution {
     public int findSecondMinimumValue(TreeNode root) {
         
+        // create tree set - sorted set
         Set<Integer> elements = new TreeSet<Integer>();
+        // perofrm preorder traversal
         preOrder(root, elements);
+        
+        // convert set to array
         int[] arr = elements.stream()
             .mapToInt(Integer::intValue)
             .toArray();
+        
+        // find second max value from array
         int max = arr[0];
         for(int i=0; i<arr.length; i++) {
             if(arr[i] > max) {
@@ -30,6 +36,7 @@ class Solution {
                 break;
             }
         }
+        // second max is same as first max, return -1 else second max
         return max == arr[0] ? -1: max;
     }
     
