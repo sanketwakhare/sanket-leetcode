@@ -41,15 +41,17 @@ class Solution {
             j++;                        
         }
         
+        // one of the n and m values will be at least be 0 or 1
         if(n == 0 || m == 0) {
+            // if all elements are already traversed
             return result;
         } else if(n >= m) {
-            // print column
+            // print remaining 1d column
             for(int k=0; k<n; k++) {
                 result.add(matrix[i++][j]);
             }
         } else if(m > n) {
-            // print row
+            // print remaining 1d row
             for(int k=0; k<m; k++) {
                 result.add(matrix[i][j++]);
             }
