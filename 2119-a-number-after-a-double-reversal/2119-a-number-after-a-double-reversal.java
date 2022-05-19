@@ -6,8 +6,6 @@ class Solution {
         int reversed1 = reverse(tempNum);
         int reversed2 = reverse(reversed1);
         
-        System.out.println(reversed1);
-        System.out.println(reversed2);
         return reversed2 == num;
         
     }
