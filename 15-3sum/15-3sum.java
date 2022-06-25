@@ -13,7 +13,7 @@ class Solution {
             
             if(!(i==0 || nums[i - 1] != nums[i])) continue;
             
-            while(j < k && k > i && j < nums.length-1 && k < nums.length) {
+            while(j < k) {
                 
                 int sum = nums[i] + nums[j] + nums[k];
                 if(sum == 0 && j!=k) {
