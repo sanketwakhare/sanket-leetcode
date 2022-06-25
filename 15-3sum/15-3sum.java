@@ -16,7 +16,7 @@ class Solution {
             while(j < k) {
                 
                 int sum = nums[i] + nums[j] + nums[k];
-                if(sum == 0 && j!=k) {
+                if(sum == 0) {
                     // found triplet
                     List<Integer> list = new ArrayList<Integer>();
                     list.add(nums[i]);
