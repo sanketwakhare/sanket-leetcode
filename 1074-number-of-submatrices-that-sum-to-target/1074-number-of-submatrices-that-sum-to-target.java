@@ -1,77 +1,38 @@
 class Solution {
   public int numSubmatrixSumTarget(int[][] matrix, int target) {
-    int r = matrix.length, c = matrix[0].length;
-
-    // compute 2D prefix sum
-    int[][] ps = new int[r + 1][c + 1];
-    for (int i = 1; i < r + 1; ++i) {
-      for (int j = 1; j < c + 1; ++j) {
-        ps[i][j] = ps[i - 1][j] + ps[i][j - 1] - ps[i - 1][j - 1] + matrix[i - 1][j - 1];
+    
+      int n = matrix.length;
+      int m = matrix[0].length;
+      
+      // generate prefix sum
+      int pf[][] = new int[n+1][m+1];
+      for(int i=1; i<=n; i++) {
+          for(int j=1; j<=m; j++) {
+              pf[i][j] = matrix[i-1][j-1] + pf[i-1][j] + pf[i][j-1] - pf[i-1][j-1];
+          }
       }
-    }
-
-    int count = 0, currSum;
-    Map<Integer, Integer> h = new HashMap();
-    // reduce 2D problem to 1D one
-    // by fixing two rows r1 and r2 and 
-    // computing 1D prefix sum for all matrices using [r1..r2] rows
-    for (int r1 = 1; r1 < r + 1; ++r1) {
-      for (int r2 = r1; r2 < r + 1; ++r2) {
-        h.clear();
-        h.put(0, 1);
-        for (int col = 1; col < c + 1; ++col) {
-          // current 1D prefix sum
-          currSum = ps[r2][col] - ps[r1 - 1][col];
-
-          // add subarrays which sum up to (currSum - target)
-          count += h.getOrDefault(currSum - target, 0);
-
-          // save current prefix sum
-          h.put(currSum, h.getOrDefault(currSum, 0) + 1);
-        }
+      
+      // // print prefix sum
+      // for(int[] row: pf)
+      //   System.out.println(Arrays.toString(row));
+      
+      int count = 0;
+      Map<Integer, Integer> map = new HashMap<>();
+      // fix top row and check every row as bottom row
+      for(int topRow = 1; topRow <= n; topRow++) {
+          for(int bottomRow = topRow; bottomRow <= n; bottomRow++) {
+              // initialize map
+              map.clear();
+              map.put(0, 1);
+              for(int col = 1; col <= m; col++) {
+                  // reuse the prefix sum values of earlier rows
+                  int sum = pf[bottomRow][col] - pf[topRow-1][col];
+                  count += map.getOrDefault(sum - target, 0);
+                  map.put(sum, map.getOrDefault(sum, 0) + 1);
+              }
+          }
       }
-    }
-
-    return count;
+      
+      return count;
   }
 }
-
-// 0 1 1  
-// 1 2 3
-// 0 1 1
-    
-    
-// 1d = 1 2 -1
-    
-// pf = 1 3 2  target = 2
-    
-// map
-// -1
-
-
-    
-    
-// 1 3 4
-// 1 4 5
-    
-
-// 0 1 0 -> target = 0 -> count = 2
-//     i
-//     j
-    
-// 1 2 1
-    
-//     {{1, 1, 1},  = 6
-     
-//    {1, 1, 1}, = 6
-     
-//    {1, 1, 1}} = 6
-
-    
-//   3x  (1xm) => 6 = 18
-//   2x   (2xm) = 6 = 12
-//   1x   (3xm) = 6 = 6
-//     -------------------------
-//                     36
-    
-    
