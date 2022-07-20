@@ -1,7 +1,7 @@
 class Solution {
     public int numMatchingSubseq(String s, String[] words) {
         
-        // build map
+        // build map of each character from a to z with List<Integer>
         Map<Character, List<Integer>> map = new HashMap();
         for (char i = 'a'; i <= 'z'; i++) {
             map.put(i, new ArrayList<>());
@@ -15,6 +15,7 @@ class Solution {
         // for every word
         for (int index = 0; index < words.length; index++) {
             String word = words[index];
+            // maintain the previuos index to determine the increasing next valid index od character
             int prevIndex = -1;
             boolean isFound = true;
             for (int i = 0; i < word.length(); i++) {
@@ -22,18 +23,21 @@ class Solution {
                 List<Integer> list = map.get(ch);
                 int nextIndex = ceil(list, prevIndex);
                 if (nextIndex == -1) {
+                    // break if we do not find valid index
                     isFound = false;
                     break;
                 }
                 prevIndex = nextIndex;
             }
             if (isFound) {
+                // increase count if found
                 count++;
             }
         }
         return count;
     }
     
+    // binary search Ceil
     public int ceil(List<Integer> list, int prevIndex) {
 
         int start = 0;
