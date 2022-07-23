@@ -4,13 +4,11 @@ class Solution {
         List<Integer> ans = new ArrayList<Integer>();
         ArrayList<Integer> arr = new ArrayList<Integer>();
         
-        
         for(int num: nums) arr.add(num);
-        
         Collections.sort(arr);
           
-        for(int i = 0; i<len; i++){
-            int index = binarySearch(arr,nums[i]);
+        for(int i = 0; i < len; i++){
+            int index = firstOccBinarySearch(arr,nums[i]);
             ans.add(index);
             arr.remove(index);
         }
@@ -18,18 +16,21 @@ class Solution {
         return ans;
     }
     
-    public int binarySearch(ArrayList<Integer> arr, int target){
+    public int firstOccBinarySearch(List<Integer> list, int target) {
         int start = 0;
-        int end = arr.size()-1;
-        int mid=0;
-        
-        while(start<=end){
-            mid = start + ((end - start)/2);
-            int val = arr.get(mid);
-            if(val<target) start = mid + 1;
-            else end = mid - 1;
+        int end = list.size()-1;
+        int firstOccIndex = -1;
+        while(start <= end) {
+            int mid = start + (end - start) / 2;
+            if(list.get(mid) == target) {
+                firstOccIndex = mid;
+                end = mid - 1;
+            } else if(list.get(mid) < target) {
+                start = mid + 1;
+            } else {
+                end = mid - 1;
+            }
         }
-        if(arr.get(start) == target) return start;
-        return mid;
+        return firstOccIndex;
     }
 }
