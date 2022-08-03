@@ -3,7 +3,7 @@ class MyCalendar {
     List<List<Integer>> events;
     
     public MyCalendar() {
-        events = new ArrayList();
+        events = new LinkedList();
     }
     
     public boolean book(int start, int end) {
