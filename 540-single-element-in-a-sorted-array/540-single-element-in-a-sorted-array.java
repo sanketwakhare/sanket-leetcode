@@ -1,6 +1,7 @@
+// Idea: check first occurrence index of repeating elements to decide on which part to search the unique element
+
 class Solution {
     public int singleNonDuplicate(int[] nums) {
-        // Idea: if first occurrence of any repeating element is at even index, the target is on right side
         
         // base cases
         int n = nums.length;
