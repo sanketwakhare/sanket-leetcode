@@ -4,18 +4,17 @@ class Solution {
         String[] dictionary = new String[] {
             ".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."
         };
-        Map<String, Integer> map = new HashMap<>();
+        Set<String> set = new HashSet<>();
         for(String word: words) {
             StringBuilder sb = new StringBuilder();
             for(int i=0; i< word.length(); i++) {
                 sb.append(dictionary[word.charAt(i) - 'a']);
             }
             String key = sb.toString();
-            int currFreq = map.getOrDefault(key, 0);
-            map.put(key, currFreq + 1);
+            set.add(key);
         }
         
-        return map.size();
+        return set.size();
         
     }
 }
