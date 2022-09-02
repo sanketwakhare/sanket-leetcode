@@ -13,56 +13,32 @@
  *     }
  * }
  */
-
-class QueueNode {
-    TreeNode node;
-    int level;
-    public QueueNode(TreeNode node, int level) {
-        this.node = node;
-        this.level = level;
-    }
-}
-
 class Solution {
     public List<Double> averageOfLevels(TreeNode root) {
-        // level wise traversal
+        List<List<Integer>> levels = new ArrayList<>();
         List<Double> result = new ArrayList<>();
         
-        List<List<Integer>> levels = new ArrayList<>();
-        Queue<QueueNode> queue = new LinkedList<>();
-        queue.add(new QueueNode(root, 1));
-        queue.add(null);
+        traverse(root, 1, levels);
         
-        while(queue.size() > 1) {
-            QueueNode curr = queue.poll();
-            if(curr == null) {
-                queue.add(null);
-            } else {
-                TreeNode node = curr.node;
-                int currLevel = curr.level;
-                
-                if(currLevel > levels.size()) {
-                    levels.add(new ArrayList<Integer>());
-                }
-                levels.get(currLevel - 1).add(node.val);
-                
-                if(node.left != null) {
-                    queue.add(new QueueNode(node.left, currLevel + 1));
-                }
-                if(node.right != null) {
-                    queue.add(new QueueNode(node.right, currLevel + 1));
-                }
-            }
-        }
-        
-        for(List<Integer> list : levels) {
+        for(List<Integer> currLevel : levels) {
             double sum = 0;
-            for(int ele : list) {
+            for(int ele : currLevel) {
                 sum += ele;
             }
-            result.add(sum / list.size());
+            result.add(sum / currLevel.size());
         }
-        
         return result;
+    }
+    
+    public void traverse(TreeNode root, int level, List<List<Integer>> levels) {
+        if(root == null) return;
+        
+        if(level > levels.size()) {
+            levels.add(new LinkedList<>());
+        }
+        levels.get(level - 1).add(root.val);
+        
+        traverse(root.left, level + 1, levels);
+        traverse(root.right, level + 1, levels);
     }
 }
