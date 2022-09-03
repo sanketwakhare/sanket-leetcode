@@ -1,7 +1,7 @@
 class Solution {
     public int[] numsSameConsecDiff(int n, int k) {
         Set<Integer> result = new LinkedHashSet<>();
-        for (int i = 0; i < 10; i++)
+        for (int i = 1; i < 10; i++)
             backtrack(i, n, k, result);
         return result.stream().mapToInt(i -> i).toArray();
     }
@@ -10,10 +10,6 @@ class Solution {
 
         // convert to string value
         String nValue = String.valueOf(val);
-        // edge case as there can not be leading 0s
-        if ("0".equals(nValue)) {
-            return;
-        }
 
         // when required number is formed, add it to result adn return
         if (nValue.length() == n) {
@@ -26,7 +22,7 @@ class Solution {
         int oldDigit = val % 10;
         for (int i = 0; i < 10; i++) {
             int newNumber = (val * 10 + i);
-            int lastDigit = newNumber % 10;
+            int lastDigit = i;
             // consider only when difference is matching
             if (oldDigit - lastDigit == k) {
                 backtrack(newNumber, n, k, result);
