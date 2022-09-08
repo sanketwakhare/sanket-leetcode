@@ -15,16 +15,20 @@
  */
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
+        // iterative solutino with stack
         List<Integer> result = new ArrayList<>();
-        inorder(root, result);
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+        
+        while(!stack.isEmpty() || curr!=null) {
+            while(curr!=null) {
+                stack.push(curr);
+                curr = curr.left;
+            }
+            TreeNode top = stack.pop();
+            result.add(top.val);
+            curr = top.right;
+        }
         return result;
-    }
-    
-    // recursion
-    public void inorder(TreeNode root, List<Integer> result) {
-        if(root == null) return;
-        inorder(root.left, result);
-        result.add(root.val);
-        inorder(root.right, result);
     }
 }
