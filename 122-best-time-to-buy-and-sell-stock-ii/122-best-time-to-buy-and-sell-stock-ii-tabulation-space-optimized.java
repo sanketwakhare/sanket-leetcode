@@ -2,10 +2,6 @@ class Solution {
     public int maxProfit(int[] prices) {
         
         int n = prices.length;
-        int[][] dp = new int[n + 1][2];
-        for (int[] row : dp) {
-            Arrays.fill(row, -1);
-        }
         int nextSell = 0;
         int nextBuy = 0;
         int currSell = 0;
