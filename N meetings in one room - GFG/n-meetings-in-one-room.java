@@ -56,7 +56,7 @@ class Solution
         public int compare(Meeting m1, Meeting m2) {
             if(m1.end < m2.end) return -1;
             if(m1.end > m2.end) return 1;
-            if(m1.index <= m2.index) return -1;
+            if(m1.index < m2.index) return -1;
             return 1;
         }
     }
