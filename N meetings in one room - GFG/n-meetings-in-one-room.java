@@ -71,7 +71,7 @@ class Solution
         }
         
         EndTimeComparator endTimeComparator = new EndTimeComparator();
-        Collections.sort(meetings, endTimeComparator);
+        meetings.sort(endTimeComparator);
         
         // System.out.println(meetings);
         
